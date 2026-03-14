@@ -1,3 +1,4 @@
+import json
 import os
 import re
 from typing import List, Dict
@@ -6,6 +7,7 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 import torch
+from huggingface_hub import hf_hub_download
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
 # ===== Optional: OpenAI for advanced review =====
@@ -46,21 +48,89 @@ if "history" not in st.session_state:
 # 顯示名稱 / 分流規則
 # =========================
 DISPLAY_LABELS: Dict[str, str] = {
+    # banking / card
     "check_balance": "帳戶餘額查詢",
     "pay_bill": "帳單繳費",
+    "min_payment": "最低應繳金額查詢",
     "report_fraud": "卡片盜刷或交易異常",
-    "book_flight": "旅遊訂票需求",
+    "pin_change": "PIN 碼變更",
+    "expiration_date": "卡片到期日查詢",
+    "replacement_card_duration": "補發卡片時間查詢",
+    "damaged_card": "卡片損壞處理",
+    "new_card": "新卡申請",
+    "account_blocked": "帳戶遭封鎖",
+    "credit_limit": "信用額度查詢",
+    "cash_withdrawal": "提款相關問題",
+    "beneficiary": "收款人設定",
+    "transfer": "轉帳服務",
+    "direct_debit": "自動扣款設定",
+    "balance_not_updated_after_cheque_or_bank_transfer": "轉帳或支票後餘額未更新",
+
+    # general assistant / utility
+    "time": "時間查詢",
+    "uber": "叫車服務",
+    "change_volume": "音量調整",
+    "change_accent": "語音口音設定",
+    "order": "訂單處理",
+    "alarm": "鬧鐘設定",
+    "calendar": "行事曆相關",
+    "calendar_update": "行事曆更新",
+    "weather": "天氣查詢",
+    "news": "新聞查詢",
+
+    # shopping / lifestyle
+    "shopping_list": "購物清單新增",
+    "shopping_list_update": "購物清單更新",
+    "restaurant_reservation": "餐廳訂位",
+    "book_flight": "航班預訂",
     "flight_status": "航班狀態查詢",
-    "carry_on": "行李規範諮詢",
+    "carry_on": "隨身行李規範",
+    "recipe": "食譜查詢",
+    "cook_time": "烹飪時間查詢",
+    "food_last": "食物保存期限查詢",
 }
 
 ROUTING_MAP: Dict[str, str] = {
+    # banking / card
     "check_balance": "存款帳務服務",
     "pay_bill": "信用卡帳務服務",
+    "min_payment": "信用卡帳務服務",
     "report_fraud": "風險控管與卡片安全服務",
-    "book_flight": "旅遊服務專員",
-    "flight_status": "旅遊資訊客服",
-    "carry_on": "旅遊規範客服",
+    "pin_change": "卡片與安全設定服務",
+    "expiration_date": "卡片資訊服務",
+    "replacement_card_duration": "卡片補發服務",
+    "damaged_card": "卡片補發服務",
+    "new_card": "開卡與新卡服務",
+    "account_blocked": "帳戶安全與解鎖服務",
+    "credit_limit": "信用卡額度服務",
+    "cash_withdrawal": "提款與現金服務",
+    "beneficiary": "轉帳與收款設定服務",
+    "transfer": "轉帳服務",
+    "direct_debit": "自動扣款服務",
+    "balance_not_updated_after_cheque_or_bank_transfer": "帳務異常處理服務",
+
+    # general assistant / utility
+    "time": "一般資訊服務",
+    "uber": "交通服務",
+    "change_volume": "裝置設定服務",
+    "change_accent": "裝置設定服務",
+    "order": "訂單服務",
+    "alarm": "提醒與鬧鐘服務",
+    "calendar": "行程管理服務",
+    "calendar_update": "行程管理服務",
+    "weather": "一般資訊服務",
+    "news": "一般資訊服務",
+
+    # shopping / lifestyle
+    "shopping_list": "購物清單服務",
+    "shopping_list_update": "購物清單服務",
+    "restaurant_reservation": "餐飲預訂服務",
+    "book_flight": "旅遊預訂服務",
+    "flight_status": "旅遊資訊服務",
+    "carry_on": "旅遊規範服務",
+    "recipe": "料理資訊服務",
+    "cook_time": "料理資訊服務",
+    "food_last": "食品保存資訊服務",
 }
 
 
@@ -72,14 +142,22 @@ def load_model_and_tokenizer():
     tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH)
     model = AutoModelForSequenceClassification.from_pretrained(MODEL_PATH)
     model.eval()
-
-    raw_id2label = model.config.id2label
-    id2label = {int(k): v for k, v in raw_id2label.items()}
-
-    return tokenizer, model, id2label
+    return tokenizer, model
 
 
-tokenizer, model, id2label = load_model_and_tokenizer()
+@st.cache_data
+def load_id2label():
+    label_path = hf_hub_download(
+        repo_id=MODEL_PATH,
+        filename="id2label.json"
+    )
+    with open(label_path, "r", encoding="utf-8") as f:
+        raw = json.load(f)
+    return {int(k): v for k, v in raw.items()}
+
+
+tokenizer, model = load_model_and_tokenizer()
+id2label = load_id2label()
 
 
 # =========================
@@ -99,11 +177,15 @@ def get_openai_client():
 # 工具函數
 # =========================
 def prettify_label(label: str) -> str:
-    return DISPLAY_LABELS.get(label, label.replace("_", " ").title())
+    if label in DISPLAY_LABELS:
+        return DISPLAY_LABELS[label]
+    return label.replace("_", " ").title()
 
 
 def get_routing_team(label: str) -> str:
-    return ROUTING_MAP.get(label, "一般客服中心")
+    if label in ROUTING_MAP:
+        return ROUTING_MAP[label]
+    return "一般客服中心"
 
 
 def clarity_label(score: float, margin: float) -> str:
