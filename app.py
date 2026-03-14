@@ -1,4 +1,3 @@
-import json
 import os
 import re
 from typing import List, Dict
@@ -27,8 +26,8 @@ st.set_page_config(
     layout="centered",
 )
 
-MODEL_PATH = "models/intent_classifier"
-ID2LABEL_PATH = os.path.join(MODEL_PATH, "id2label.json")
+# Hugging Face model repo
+MODEL_PATH = "CarolineKuo/fubon-intent-classifier"
 
 CONFIDENCE_THRESHOLD = 0.35
 MARGIN_THRESHOLD = 0.10
@@ -73,18 +72,14 @@ def load_model_and_tokenizer():
     tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH)
     model = AutoModelForSequenceClassification.from_pretrained(MODEL_PATH)
     model.eval()
-    return tokenizer, model
+
+    raw_id2label = model.config.id2label
+    id2label = {int(k): v for k, v in raw_id2label.items()}
+
+    return tokenizer, model, id2label
 
 
-@st.cache_data
-def load_id2label():
-    with open(ID2LABEL_PATH, "r", encoding="utf-8") as f:
-        raw = json.load(f)
-    return {int(k): v for k, v in raw.items()}
-
-
-tokenizer, model = load_model_and_tokenizer()
-id2label = load_id2label()
+tokenizer, model, id2label = load_model_and_tokenizer()
 
 
 # =========================
@@ -285,6 +280,7 @@ with st.sidebar:
         st.write(f"進階模型：{LLM_MODEL}")
         st.write(f"Confidence 門檻：{CONFIDENCE_THRESHOLD}")
         st.write(f"Margin 門檻：{MARGIN_THRESHOLD}")
+        st.write(f"模型來源：{MODEL_PATH}")
 
 with st.expander("系統說明", expanded=False):
     st.write(
@@ -324,7 +320,6 @@ if st.button("開始分析"):
         st.warning("請先輸入問題。")
         st.stop()
 
-    # ===== 拆解需求 =====
     if use_llm_split:
         sub_queries = llm_split_query(query)
     else:
@@ -400,7 +395,6 @@ if st.button("開始分析"):
             if review_used:
                 st.info("因為模型對第一次結果不夠確定，系統已自動進行第二次分析。")
 
-            # ===== 記錄歷史資料（供 Dashboard 使用）=====
             st.session_state.history.append({
                 "query": sub_q,
                 "intent": final_display_label,

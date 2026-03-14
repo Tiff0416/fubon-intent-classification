@@ -1,7 +1,10 @@
 streamlit
 transformers
 torch
-scikit-learn
 numpy
 pandas
 openai
+sentencepiece
+scikit-learn
+huggingface_hub
+safetensors
