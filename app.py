@@ -376,6 +376,126 @@ ROUTING_MAP: Dict[str, str] = {
     "weather": "一般資訊服務",
     "vaccines": "健康資訊服務",
 }
+# =========================
+# 顧客版回覆模板（先精修高價值銀行意圖）
+# =========================
+CUSTOMER_RESPONSE_MAP: Dict[str, Dict[str, object]] = {
+    "balance": {
+        "title": "帳戶餘額查詢",
+        "summary": "我理解您想查詢帳戶餘額。",
+        "advice": "您可以先查看最新餘額與最近交易紀錄，確認帳戶狀態是否正常。",
+        "actions": ["查看餘額", "查看交易紀錄", "聯絡客服"],
+    },
+    "transactions": {
+        "title": "交易紀錄查詢",
+        "summary": "我理解您想查詢最近的交易紀錄。",
+        "advice": "建議先確認最近交易明細，若有異常可再進一步處理。",
+        "actions": ["查看交易紀錄", "查詢帳戶餘額", "聯絡客服"],
+    },
+    "transfer": {
+        "title": "轉帳服務",
+        "summary": "我理解您想進行轉帳。",
+        "advice": "請確認轉出帳戶、金額與收款資訊是否正確，再進一步操作。",
+        "actions": ["開始轉帳", "查看餘額", "聯絡客服"],
+    },
+    "report_fraud": {
+        "title": "卡片盜刷或交易異常",
+        "summary": "我理解您可能遇到卡片盜刷或異常交易問題。",
+        "advice": "建議先確認最近交易紀錄，若發現異常，可立即掛失卡片並聯絡客服。",
+        "actions": ["查看交易紀錄", "立即掛失卡片", "聯絡客服"],
+    },
+    "report_lost_card": {
+        "title": "掛失卡片",
+        "summary": "我理解您想處理卡片遺失問題。",
+        "advice": "若卡片遺失，建議立即掛失，以降低風險並保護帳戶安全。",
+        "actions": ["立即掛失卡片", "申請補發卡片", "聯絡客服"],
+    },
+    "pay_bill": {
+        "title": "帳單繳費",
+        "summary": "我理解您想進行帳單繳費。",
+        "advice": "您可以先確認應繳金額與到期日，再選擇付款方式完成繳費。",
+        "actions": ["立即繳費", "查看帳單餘額", "查看到期日"],
+    },
+    "bill_due": {
+        "title": "帳單到期日查詢",
+        "summary": "我理解您想查詢帳單到期日。",
+        "advice": "建議先確認本期帳單到期日，避免逾期影響信用。",
+        "actions": ["查看到期日", "立即繳費", "查看帳單餘額"],
+    },
+    "bill_balance": {
+        "title": "帳單餘額查詢",
+        "summary": "我理解您想查詢帳單餘額。",
+        "advice": "您可以先查看本期應繳金額，再決定是否立即付款。",
+        "actions": ["查看帳單餘額", "立即繳費", "查看到期日"],
+    },
+    "credit_limit": {
+        "title": "信用額度查詢",
+        "summary": "我理解您想查詢信用卡額度。",
+        "advice": "您可以查看目前信用額度與可用額度，確認是否符合使用需求。",
+        "actions": ["查看信用額度", "申請額度調整", "聯絡客服"],
+    },
+    "credit_limit_change": {
+        "title": "信用額度調整",
+        "summary": "我理解您想申請信用額度調整。",
+        "advice": "建議先確認目前額度與調整需求，再進一步提交申請。",
+        "actions": ["申請額度調整", "查看目前額度", "聯絡客服"],
+    },
+    "card_declined": {
+        "title": "刷卡失敗處理",
+        "summary": "我理解您遇到刷卡失敗問題。",
+        "advice": "建議先確認卡片狀態、可用額度與交易環境，必要時聯絡客服進一步協助。",
+        "actions": ["查看卡片狀態", "查看信用額度", "聯絡客服"],
+    },
+    "account_blocked": {
+        "title": "帳戶遭封鎖",
+        "summary": "我理解您遇到帳戶遭封鎖的問題。",
+        "advice": "建議先確認是否有安全通知或驗證需求，必要時聯絡客服協助解鎖。",
+        "actions": ["確認安全通知", "聯絡客服", "重新驗證身份"],
+    },
+    "pin_change": {
+        "title": "PIN 碼變更",
+        "summary": "我理解您想修改 PIN 碼。",
+        "advice": "建議在安全環境下進行 PIN 碼變更，並避免使用過於簡單的數字組合。",
+        "actions": ["修改 PIN 碼", "查看卡片設定", "聯絡客服"],
+    },
+    "replacement_card_duration": {
+        "title": "補發卡片時間查詢",
+        "summary": "我理解您想查詢補發卡片所需時間。",
+        "advice": "您可以先確認補發申請是否完成，再查看預估寄送時間。",
+        "actions": ["查看補發進度", "申請補發卡片", "聯絡客服"],
+    },
+    "application_status": {
+        "title": "申請進度查詢",
+        "summary": "我理解您想查詢申請進度。",
+        "advice": "您可以先確認申請編號或身份資訊，再查看最新審核狀態。",
+        "actions": ["查看申請進度", "重新提交資料", "聯絡客服"],
+    },
+    "exchange_rate": {
+        "title": "匯率查詢",
+        "summary": "我理解您想查詢匯率資訊。",
+        "advice": "建議確認欲兌換的幣別與交易時間，以取得較準確的匯率資訊。",
+        "actions": ["查看匯率", "查看外匯服務", "聯絡客服"],
+    },
+    "interest_rate": {
+        "title": "利率查詢",
+        "summary": "我理解您想查詢利率資訊。",
+        "advice": "建議確認您要查詢的是信用卡、貸款或其他產品的利率。",
+        "actions": ["查看利率", "查看產品資訊", "聯絡客服"],
+    },
+    "spending_history": {
+        "title": "消費紀錄查詢",
+        "summary": "我理解您想查詢消費紀錄。",
+        "advice": "您可以查看近期消費明細，確認是否有未授權或異常交易。",
+        "actions": ["查看消費紀錄", "查看交易紀錄", "聯絡客服"],
+    },
+}
+
+DEFAULT_CUSTOMER_RESPONSE = {
+    "title": "客服問題分析結果",
+    "summary": "我已理解您的需求。",
+    "advice": "目前可先提供基礎建議；若需要進一步協助，建議聯絡客服專員。",
+    "actions": ["聯絡客服", "重新提問"],
+}
 
 # =========================
 # 載入模型與標籤
@@ -430,6 +550,59 @@ def get_routing_team(label: str) -> str:
         return ROUTING_MAP[label]
     return "一般客服中心"
 
+def get_customer_response(label: str) -> Dict[str, object]:
+    if label in CUSTOMER_RESPONSE_MAP:
+        return CUSTOMER_RESPONSE_MAP[label]
+    return {
+        "title": prettify_label(label),
+        "summary": DEFAULT_CUSTOMER_RESPONSE["summary"],
+        "advice": DEFAULT_CUSTOMER_RESPONSE["advice"],
+        "actions": DEFAULT_CUSTOMER_RESPONSE["actions"],
+    }
+
+
+def render_action_buttons(actions: List[str], key_prefix: str):
+    cols = st.columns(len(actions))
+    for i, action in enumerate(actions):
+        with cols[i]:
+            st.button(action, key=f"{key_prefix}_{i}")
+
+
+def render_customer_result_card(
+    user_query: str,
+    display_label: str,
+    routing_team: str,
+    customer_response: Dict[str, object],
+    show_debug: bool = False,
+    debug_info: Dict[str, object] = None,
+):
+    st.markdown(
+        f"""
+        <div class="result-card">
+            <div class="result-tag">AI 理解到的需求</div>
+            <div class="result-title">{customer_response["title"]}</div>
+            <div class="result-summary">{customer_response["summary"]}</div>
+            <div class="result-advice-title">建議您這樣做</div>
+            <div class="result-advice">{customer_response["advice"]}</div>
+            <div class="result-routing">建議處理單位：{routing_team}</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    st.markdown("**您可以選擇：**")
+    render_action_buttons(customer_response["actions"], key_prefix=f"action_{display_label}_{abs(hash(user_query))}")
+
+    if show_debug and debug_info is not None:
+        with st.expander("查看模型判斷細節（主管展示用）", expanded=False):
+            st.write(f"**預測意圖：** {display_label}")
+            st.write(f"**信心值：** {debug_info['confidence']:.3f}")
+            st.write(f"**前兩名差距：** {debug_info['margin']:.3f}")
+            top_df = pd.DataFrame({
+                "候選問題類型": [x["display_intent"] for x in debug_info["top_results"]],
+                "分數": [round(x["score"], 3) for x in debug_info["top_results"]],
+            })
+            st.table(top_df)
 
 def clarity_label(score: float, margin: float) -> str:
     if score >= 0.85:
@@ -587,60 +760,148 @@ def llm_rerank_intent(query: str, candidates: List[str]) -> str:
 
 
 # =========================
-# UI
+# UI（顧客版前台 + 主管展示模式）
 # =========================
-st.title("🏦 銀行客服問題分析助手")
-st.caption("系統會自動判斷客戶想處理的問題；只有在模型真的不明確時，才進行第二次判斷。")
+st.markdown(
+    """
+    <style>
+    .stApp {
+        background: linear-gradient(180deg, #F7FAFC 0%, #EDF4F7 100%);
+    }
+    .main-title {
+        color: #0F3B57;
+        font-size: 2rem;
+        font-weight: 800;
+        margin-bottom: 0.2rem;
+    }
+    .sub-title {
+        color: #5C6F7C;
+        font-size: 1rem;
+        margin-bottom: 1.2rem;
+    }
+    .hero-box {
+        background: white;
+        border-radius: 16px;
+        padding: 1.2rem 1.2rem 1rem 1.2rem;
+        box-shadow: 0 6px 20px rgba(15,59,87,0.08);
+        border-left: 6px solid #0F766E;
+        margin-bottom: 1rem;
+    }
+    .result-card {
+        background: white;
+        border-radius: 18px;
+        padding: 1.1rem 1.2rem;
+        box-shadow: 0 8px 24px rgba(15,59,87,0.08);
+        border: 1px solid #DDE7EE;
+        margin-top: 0.7rem;
+        margin-bottom: 0.7rem;
+    }
+    .result-tag {
+        color: #0F766E;
+        font-size: 0.9rem;
+        font-weight: 700;
+        margin-bottom: 0.3rem;
+    }
+    .result-title {
+        color: #0F3B57;
+        font-size: 1.35rem;
+        font-weight: 800;
+        margin-bottom: 0.35rem;
+    }
+    .result-summary {
+        color: #243746;
+        font-size: 1rem;
+        margin-bottom: 0.7rem;
+    }
+    .result-advice-title {
+        color: #0F3B57;
+        font-weight: 700;
+        margin-bottom: 0.2rem;
+    }
+    .result-advice {
+        color: #314A5A;
+        margin-bottom: 0.8rem;
+        line-height: 1.6;
+    }
+    .result-routing {
+        color: #5A6B77;
+        font-size: 0.95rem;
+    }
+    .section-title {
+        color: #0F3B57;
+        font-size: 1.1rem;
+        font-weight: 800;
+        margin-top: 0.8rem;
+        margin-bottom: 0.5rem;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.markdown('<div class="main-title">富邦智能客服</div>', unsafe_allow_html=True)
+st.markdown(
+    '<div class="sub-title">請以英文輸入問題，系統會以中文提供理解結果與建議處理方式。</div>',
+    unsafe_allow_html=True,
+)
+
+st.markdown(
+    """
+    <div class="hero-box">
+        <b>您可以詢問的範例：</b><br>
+        • I want to check my balance<br>
+        • Someone used my card and I want to report fraud<br>
+        • I want to check my balance and pay my bill
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 client = get_openai_client()
 
 with st.sidebar:
+    st.markdown("### 顯示模式")
+    show_debug = st.toggle("主管展示模式（顯示模型細節）", value=False)
+
     st.markdown("### 系統狀態")
-    st.write("基本判斷功能：正常")
-    st.write(f"第二次判斷功能：{'可用' if client is not None else '不可用'}")
+    st.write("BERT 意圖判斷：正常")
+    st.write(f"LLM 輔助判斷：{'可用' if client is not None else '不可用'}")
 
     with st.expander("技術設定", expanded=False):
         st.write("主分類模型：BERT")
-        st.write(f"API 連線：{'已連線' if client is not None else '未連線'}")
         st.write(f"進階模型：{LLM_MODEL}")
         st.write(f"Confidence 門檻：{CONFIDENCE_THRESHOLD}")
         st.write(f"Margin 門檻：{MARGIN_THRESHOLD}")
         st.write(f"模型來源：{MODEL_PATH}")
 
-with st.expander("系統說明", expanded=False):
-    st.write(
-        """
-        本系統會分析客戶提出的問題，判斷最可能的服務需求，
-        並建議應該轉交給哪個客服類別處理。
-
-        系統不只看第一名分數，也會看第一名和第二名的差距。
-        如果第一名明顯領先，即使整體分數不高，也可能代表模型其實很確定。
-
-        只有在結果真的不明確時，才會進行第二次分析。
-        """
-    )
-
-st.markdown("### 範例案件")
+st.markdown('<div class="section-title">快速示範</div>', unsafe_allow_html=True)
 col1, col2 = st.columns(2)
 with col1:
-    if st.button("帳戶餘額查詢"):
+    if st.button("查詢餘額"):
         st.session_state["demo_query"] = "I want to check my balance"
-    if st.button("卡片盜刷異常"):
+    if st.button("卡片盜刷"):
         st.session_state["demo_query"] = "Someone used my card and I want to report fraud"
 with col2:
-    if st.button("複合需求示範"):
+    if st.button("帳單繳費"):
+        st.session_state["demo_query"] = "I want to pay my bill"
+    if st.button("複合需求"):
         st.session_state["demo_query"] = "I want to check my balance and pay my bill"
-    if st.button("旅遊服務示範"):
-        st.session_state["demo_query"] = "I want to book a flight and reserve a hotel"
 
 default_query = st.session_state.get("demo_query", "")
-query = st.text_area("請輸入客戶問題：", value=default_query, height=120)
+query = st.text_area(
+    "請輸入您的問題（英文）",
+    value=default_query,
+    height=120,
+    placeholder="例如：I want to report fraud",
+)
 
-st.markdown("### 處理選項")
-use_llm_split = st.checkbox("把一句話拆成多個問題來分析", value=False)
-use_llm_fallback = st.checkbox("當結果真的不明確時，啟用第二次判斷", value=True)
+col_opt1, col_opt2 = st.columns(2)
+with col_opt1:
+    use_llm_split = st.checkbox("若一句話包含多個需求，先進行拆解", value=True)
+with col_opt2:
+    use_llm_fallback = st.checkbox("結果不明確時，啟用 LLM 輔助判斷", value=True)
 
-if st.button("開始分析"):
+if st.button("開始分析", type="primary"):
     if not query.strip():
         st.warning("請先輸入問題。")
         st.stop()
@@ -650,19 +911,13 @@ if st.button("開始分析"):
     else:
         sub_queries = split_multi_intent_rule_based(query)
 
-    st.markdown("## 1) 問題拆解結果")
-    for i, sq in enumerate(sub_queries, start=1):
-        st.write(f"{i}. {sq}")
-
-    st.markdown("## 2) 分析結果與建議")
+    if len(sub_queries) > 1:
+        st.info("我理解您這次有多個需求，已為您拆成多個問題依序分析。")
 
     for idx, sub_q in enumerate(sub_queries, start=1):
         result = predict_intent(sub_q)
         pred_intent = result["pred_intent"]
-        pred_display_intent = result["pred_display_intent"]
         confidence = result["confidence"]
-        top1_score = result["top1_score"]
-        top2_score = result["top2_score"]
         margin = result["margin"]
         top_results = result["top_results"]
 
@@ -671,75 +926,89 @@ if st.button("開始分析"):
         )
 
         final_label = pred_intent
-        final_display_label = pred_display_intent
         review_used = False
 
-        with st.container(border=True):
-            st.markdown(f"### 問題 {idx}")
-            st.write(f"**客戶問題：** {sub_q}")
-            st.write(f"**系統判斷這是什麼問題：** `{pred_display_intent}`")
-            st.write(f"**判斷信心：** {confidence:.3f}")
-            st.write(f"**第一候選分數：** {top1_score:.3f}")
-            st.write(f"**第二候選分數：** {top2_score:.3f}")
-            st.write(f"**前兩名差距：** {margin:.3f}")
-            st.write(f"**結果清楚程度：** {clarity_label(confidence, margin)}")
-            st.write(f"**建議客服類別：** {get_routing_team(pred_intent)}")
+        if need_second_review and use_llm_fallback:
+            candidates = [x["intent"] for x in top_results]
+            reviewed_label = llm_rerank_intent(sub_q, candidates)
+            if reviewed_label:
+                final_label = reviewed_label.strip()
+                review_used = True
 
-            top_df = pd.DataFrame({
-                "候選問題類型": [x["display_intent"] for x in top_results],
-                "分數": [round(x["score"], 3) for x in top_results],
-            })
-            st.write("**其他可能結果：**")
-            st.table(top_df)
+        final_display_label = prettify_label(final_label)
+        routing_team = get_routing_team(final_label)
+        customer_response = get_customer_response(final_label)
 
-            if need_second_review:
-                st.warning("模型對這個結果仍不夠確定，建議啟用第二次判斷或轉交人工客服確認。")
+        if len(sub_queries) > 1:
+            st.markdown(f"### 需求 {idx}")
+            st.caption(sub_q)
 
-                if use_llm_fallback:
-                    candidates = [x["intent"] for x in top_results]
-                    reviewed_label = llm_rerank_intent(sub_q, candidates)
-
-                    if reviewed_label:
-                        final_label = reviewed_label.strip()
-                        final_display_label = prettify_label(final_label)
-                        review_used = True
-
-                        st.write(f"**第二次判斷結果：** `{final_display_label}`")
-                        st.write(f"**更新後建議客服類別：** {get_routing_team(final_label)}")
-                    else:
-                        st.write("**第二次判斷結果：** 目前無法取得，建議改由人工客服確認。")
-            else:
-                if confidence < CONFIDENCE_THRESHOLD and margin >= MARGIN_THRESHOLD:
-                    st.success("雖然整體分數不高，但第一候選明顯領先，系統判定此結果可接受。")
-                else:
-                    st.success("這個結果已經相對明確，可直接進一步處理。")
-
-            st.markdown("#### 建議怎麼處理")
-            st.write(get_processing_advice(confidence, margin, len(sub_queries)))
-
-            if review_used:
-                st.info("因為模型對第一次結果不夠確定，系統已自動進行第二次分析。")
-
-            st.session_state.history.append({
-                "query": sub_q,
-                "intent": final_display_label,
+        render_customer_result_card(
+            user_query=sub_q,
+            display_label=final_display_label,
+            routing_team=routing_team,
+            customer_response=customer_response,
+            show_debug=show_debug,
+            debug_info={
                 "confidence": confidence,
-                "top1_score": top1_score,
-                "top2_score": top2_score,
                 "margin": margin,
-                "used_second_review": review_used,
-                "routing_team": get_routing_team(final_label),
-            })
+                "top_results": top_results,
+            },
+        )
 
-    st.markdown("## 3) 整體建議")
-    st.write(
-        """
-        - **結果很清楚的問題**：可直接轉交對應客服類別  
-        - **分數不高但前兩名差距很大的問題**：可優先採用第一候選  
-        - **分數低且前兩名很接近的問題**：建議再做一次判斷或由人工客服確認  
-        - **同一句話包含多個需求**：建議拆成多個問題後分別處理
-        """
-    )
+        if review_used:
+            st.caption("此結果已啟用 LLM 輔助判斷，以提升理解準確度。")
+
+        st.session_state.history.append({
+            "query": sub_q,
+            "intent": final_display_label,
+            "confidence": confidence,
+            "top1_score": result["top1_score"],
+            "top2_score": result["top2_score"],
+            "margin": margin,
+            "used_second_review": review_used,
+            "routing_team": routing_team,
+        })
+
+# =========================
+# Dashboard（保留，但預設收起）
+# =========================
+st.markdown("---")
+with st.expander("查看分析統計（主管展示用）", expanded=False):
+    history = st.session_state.history
+
+    if len(history) == 0:
+        st.info("目前還沒有分析資料。")
+    else:
+        df = pd.DataFrame(history)
+
+        col1, col2, col3, col4 = st.columns(4)
+        with col1:
+            st.metric("已分析問題數", len(df))
+        with col2:
+            st.metric("平均判斷信心", f"{df['confidence'].mean():.2f}")
+        with col3:
+            ambiguous_cases = (
+                (df["confidence"] < CONFIDENCE_THRESHOLD) &
+                (df["margin"] < MARGIN_THRESHOLD)
+            ).sum()
+            st.metric("真正不明確案例", int(ambiguous_cases))
+        with col4:
+            st.metric("已啟用第二次判斷", int(df["used_second_review"].sum()))
+
+        st.subheader("常見問題類型分布")
+        st.bar_chart(df["intent"].value_counts())
+
+        st.subheader("建議客服類別分布")
+        st.bar_chart(df["routing_team"].value_counts())
+
+        with st.expander("查看歷史分析紀錄", expanded=False):
+            history_view = df.copy()
+            history_view.columns = [
+                "客戶問題", "問題類型", "判斷信心", "第一候選分數",
+                "第二候選分數", "前兩名差距", "是否啟用第二次判斷", "建議客服類別"
+            ]
+            st.dataframe(history_view, use_container_width=True)
 
 # =========================
 # Dashboard
